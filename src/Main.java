@@ -1,6 +1,6 @@
 //Main.java
 
-import java.io*
+import java.io.*;
 
 public class Main {
 	public static void Main(String[] args) {
@@ -24,7 +24,7 @@ public class Main {
 		int poolNumber = fileInput.nextInt();
 		int poolSize = fileInput.nextInt();	
 
-		private Competitor[] = new competitorList[tournamentSize+1];
+		Competitor[] competitorList = new Competitor[tournamentSize+1];
 
 		if(tournamentSize <= 0) throw new IllegalArgumentException();
 		

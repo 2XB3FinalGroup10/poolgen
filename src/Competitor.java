@@ -11,15 +11,9 @@ public class Competitor {
 		this.region = region;
 	}
 
-	public int getRank() {
-		return this.rank;
-	}
+	public int getRank() {return this.rank;}
 
-	public String getName() {
-		return this.name;
-	}
+	public String getName() {return this.name;}
 
-	public String getRegion() {
-		return this.region;
-	}
+	public String getRegion() {return this.region;}
 }
