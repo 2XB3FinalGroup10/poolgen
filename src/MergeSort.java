@@ -30,11 +30,11 @@ public class MergeSort {
         for (int k = low; k <= high; k++)
             if (i > mid) 								    {a[k] = auxiliary[j++];}
             else if (j > high ) 						    {a[k] = auxiliary[i++];}
-            else if (lessRank(auxiliary[j], auxiliary[i]))	{a[k] = auxiliary[j++];}
+            else if (less(auxiliary[j], auxiliary[i]))	{a[k] = auxiliary[j++];}
             else 										    {a[k] = auxiliary[i++];}
     }
 
-    private static boolean lessRank(Competitor a, Competitor b) {
+    private static boolean less(Competitor a, Competitor b) {
         return a.getRank() <= b.getRank();
     }
 
