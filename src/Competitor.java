@@ -1,9 +1,9 @@
 //Competitor.java
 
 public class Competitor {
-	private final String name;
-	private final int rank;
-	private final String region;
+	private String name;
+	private int rank;
+	private String region;
 
 	public Competitor(String name, int rank, String region) {
 		this.name = name;
@@ -11,9 +11,27 @@ public class Competitor {
 		this.region = region;
 	}
 
-	public int getRank() {return this.rank;}
+	public String getName() {
+		return name;
+	}
 
-	public String getName() {return this.name;}
+	public void setName(String name) {
+		this.name = name;
+	}
 
-	public String getRegion() {return this.region;}
+	public int getRank() {
+		return rank;
+	}
+
+	public void setRank(int rank) {
+		this.rank = rank;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
 }
