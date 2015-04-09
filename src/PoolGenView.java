@@ -1,6 +1,8 @@
 /**
  * Created by Serge on 08/04/2015.
  */
+import com.sun.org.glassfish.gmbal.ParameterNames;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -15,11 +17,17 @@ public class PoolGenView extends JFrame {
     private JButton searchButton;
 
     //Labels
-    private JLabel textfield;       //displays error messages.
+    private JLabel errorText;       //displays error messages.
 
     //Textfields (for user input)
-    private JTextField poolNum;
-    private JTextField playersPerPool;
+    private JTextField bracketSize;
+    private JTextField seededPlayers;
+
+    //String
+    private String error;
+
+    //FileChooser
+    private JFileChooser fc;
 
     //Image data here:
     public static final String deleteButtonImageName            = "delete1.png";
@@ -42,16 +50,15 @@ public class PoolGenView extends JFrame {
     public PoolGenView(int width, int height){
         //gets rid of java's default positioning system so we have more control and can manually position everything using absolute positioning
         this.getContentPane().setLayout(null);
-        this.setLayout(null);
-
-        setupMainMenu(width, height);                   //sets up the main menu panel
 
         //This will setup what the user will be able to see.  Main menu is initially visible.
         //Additional JPanels should be set to false.
-        mainMenu.setVisible(true);  // shows the main menu
-
+        setupMainMenu(width, height);                   //sets up the main menu panel
+        this.setTitle("2XB3 Final Project PoolGen");    //title of the program
+        this.setSize(width, height);                    //sets the size of the screen
+        this.setLayout(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//sets the default close operation
-        this.setSize(width, height);//sets the size of the screen
+        mainMenu.setVisible(true);                          // shows the main menu
     }
 
     //Setup
@@ -59,14 +66,17 @@ public class PoolGenView extends JFrame {
         //create the main menu panel
         mainMenu = new JPanel();            // creates an empty panel
         mainMenu.setSize(width, height);    // sets its size equal to the size and height of the screen
-        mainMenu.setLocation(0,0);          // sets the location of the panel
+        mainMenu.setLocation(0, 0);          // sets the location of the panel
         mainMenu.setLayout(null);           // removes the default layout manager, allowing us to position everything manually and giving us more control
-
         //create the main menu buttons
         deleteButton = createButton(deleteButtonImageName, width/2-buttonWidth/2, height/4*2-buttonHeight/2, buttonWidth, buttonHeight, mainMenu, deleteButtonImageNamePressed);
         generateButton = createButton(generateButtonImageName, width/2-buttonWidth/2, height/4*2-buttonHeight/2, buttonWidth, buttonHeight, mainMenu, generateButtonImageNamePressed);
         searchButton = createButton(searchButtonImageName, width/2-buttonWidth/2, height/4*2-buttonHeight/2, buttonWidth, buttonHeight, mainMenu, searchButtonImageNamePressed);
-
+        //create the main menu JTextFields
+        bracketSize = createTextField(width/2-buttonWidth/2, height/4*2-buttonHeight/2, 4, mainMenu);
+        seededPlayers = createTextField(width/2-buttonWidth/2, height/4*2-buttonHeight/2, 4, mainMenu);
+        //creates the main menu JLabel
+        errorText = createLabel(error, width/2-buttonWidth/2, height/4*2-buttonHeight/2, mainMenu);
         //add the main menu to the screen
         this.add(mainMenu);
     }
@@ -91,12 +101,20 @@ public class PoolGenView extends JFrame {
         //by changing this variable we can increase or decrease the distance for all the buttons from the edge
         int boundary = 20;
         //adjust all the button's position
-        generateButton.setLocation(this.getWidth() / 16, this.getHeight()/8);//top
+        generateButton.setLocation(this.getWidth() / 16, this.getHeight() / 8);//top
     }
 
-    public JButton createButton(String name, int x, int y, JPanel parent, String pressedName){
-        return createButton(name, x,y, buttonWidth, buttonHeight, parent, pressedName); }
-
+    /**
+     *
+     * @param name          the button image
+     * @param x             the x coordinate of location
+     * @param y             the y coordinate of location
+     * @param width         the width of the button
+     * @param height        the height of the button
+     * @param parent        the JPanel which will be added on
+     * @param pressedName   the button image when pressed
+     * @return the created button
+     */
     public JButton createButton(String name, int x, int y, int width, int height, JPanel parent, String pressedName) {
         ImageIcon imageIcon = new ImageIcon(getClass().getResource("/images/"+name));
         JButton newButton = new JButton(imageIcon); // creates the button, with the image name that is given
@@ -126,10 +144,53 @@ public class PoolGenView extends JFrame {
         return newButton;//returns the newly created button
     }
 
+    /**
+     *
+     * @param x         the x coordinate of location
+     * @param y         the y coordinate of location
+     * @param l         the length of the JTextField
+     * @param parent    the JPanel which will be added on
+     * @return created JTextField
+     */
+    public JTextField createTextField(int x, int y, int l, JPanel parent){
+        JTextField newTextField = new JTextField(l);
+
+        newTextField.setLocation(x, y);
+
+        newTextField.setVisible(true);
+
+        parent.add(newTextField);
+        return newTextField;
+    }
+
+    /**
+     *
+     * @param text      the text that will be displayed
+     * @param x         the x-coordinate of the location
+     * @param y         the y-coordinate of the location
+     * @param parent    the JPanel which will be added on
+     * @return created JLabel
+     */
+    public JLabel createLabel(String text, int x, int y, JPanel parent){
+        JLabel newLabel = new JLabel();
+        newLabel.setText(text);
+
+        newLabel.setLocation(x, y);
+
+        newLabel.setVisible(true);
+
+        parent.add(newLabel);
+        return newLabel;
+    }
+
     //this function assigns the listeners for the button and the screen.
     public void addCalculateListener(ActionListener listenForButton){
         //make the listener for the main menu buttons
+        deleteButton.addActionListener(listenForButton);
         generateButton.addActionListener(listenForButton);
-
+        searchButton.addActionListener(listenForButton);
+        //make listener for the JTextFields
+        bracketSize.addActionListener(listenForButton);
+        seededPlayers.addActionListener(listenForButton);
     }//end calculate listener
 }
