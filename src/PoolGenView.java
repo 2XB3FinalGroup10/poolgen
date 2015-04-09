@@ -10,7 +10,9 @@ public class PoolGenView extends JFrame {
     private JPanel mainMenu;
 
     //Buttons
+    private JButton deleteButton;
     private JButton generateButton;
+    private JButton searchButton;
 
     //Labels
     private JLabel textfield;       //displays error messages.
@@ -20,16 +22,20 @@ public class PoolGenView extends JFrame {
     private JTextField playersPerPool;
 
     //Image data here:
+    public static final String deleteButtonImageName            = "delete1.png";
+    public static final String deleteButtonImageNamePressed     = "delete2.png";
     public static final String generateButtonImageName          = "generate1.png";
     public static final String generateButtonImageNamePressed   = "generate2.png";
+    public static final String searchButtonImageName            = "search1.png";
+    public static final String searchButtonImageNamePressed     = "search2.png";
 
     //this is the size of the buttons on the screen
-    private static final int buttonWidth = 289;     //button width
-    private static final int buttonHeight = 74;     //stores height
+    private static final int buttonWidth = 160;     //button width
+    private static final int buttonHeight = 41;     //stores height
 
     //Screen size
-    private static final int initialScreenHeight = 400;
-    private static final int initialScreenWidth  = 400;
+    private static final int initialScreenHeight = 800;
+    private static final int initialScreenWidth  = 500;
 
     //constructors
     public PoolGenView(){ this(initialScreenWidth, initialScreenHeight); }
@@ -57,7 +63,9 @@ public class PoolGenView extends JFrame {
         mainMenu.setLayout(null);           // removes the default layout manager, allowing us to position everything manually and giving us more control
 
         //create the main menu buttons
+        deleteButton = createButton(deleteButtonImageName, width/2-buttonWidth/2, height/4*2-buttonHeight/2, buttonWidth, buttonHeight, mainMenu, deleteButtonImageNamePressed);
         generateButton = createButton(generateButtonImageName, width/2-buttonWidth/2, height/4*2-buttonHeight/2, buttonWidth, buttonHeight, mainMenu, generateButtonImageNamePressed);
+        searchButton = createButton(searchButtonImageName, width/2-buttonWidth/2, height/4*2-buttonHeight/2, buttonWidth, buttonHeight, mainMenu, searchButtonImageNamePressed);
 
         //add the main menu to the screen
         this.add(mainMenu);

@@ -3,9 +3,21 @@
 import java.io.*;
 import java.util.*;
 import java.lang.*;
+import javax.swing.*;
 
 public class PoolGenMain {
     public static void main(String[] args) {
+
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                PoolGenModel theModel = new PoolGenModel();
+                PoolGenView theView = new PoolGenView(800,600);//, theModel.getBoardConfiguration(), theModel.getGameState());
+                PoolGenController theController = new PoolGenController(theView,theModel);
+                theView.setVisible(true);
+                theView.repaint();
+            }
+        });
+
         String fileName = "input.txt";
         File file = new File(fileName);
 
