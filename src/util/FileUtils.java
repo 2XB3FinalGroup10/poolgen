@@ -12,7 +12,7 @@ public class FileUtils {
      *
      * @param file the file to be checked
      * @param validExtensions an array of strings containing valid file extensions
-     * @return boolean
+     * @return true if the file is valid and has a valid extension, false otherwise
      */
     public static boolean isValidFile(File file, String... validExtensions) {
         if (isValidFile(file)) {
@@ -28,7 +28,7 @@ public class FileUtils {
      * Checks whether a File exists and is a file.
      *
      * @param file the file to be checked
-     * @return boolean
+     * @return true if the file exists and is a file, false otherwise
      */
     public static boolean isValidFile(File file) {
         return file.exists() && file.isFile();
