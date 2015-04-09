@@ -8,9 +8,12 @@ import java.util.HashMap;
  * Date: 4/3/2015
  */
 public class PoolGen {
+    private static final String ACCEPTED_COMPETITOR_FILE_TYPES = "csv, txt";
+
     // Map of seeds to competitors
     private HashMap<Integer, Competitor> competitors;
     private File competitorsFile;
+    private String competitorsFilePath;
     private int bracketSize;
     private int numExitCompetitors;
 
@@ -22,6 +25,18 @@ public class PoolGen {
 
     private void startGUI() {
         // Start GUI
+    }
+
+    private boolean loadCompetitors() {
+        File competitorsFile = new File(this.competitorsFilePath);
+
+        if (FileUtils.isValidFile(competitorsFile, ACCEPTED_COMPETITOR_FILE_TYPES)) {
+            this.competitorsFile = competitorsFile;
+        } else {
+            return false;
+        }
+
+        return true;
     }
 
     private void generatePools() {
@@ -36,12 +51,12 @@ public class PoolGen {
         this.competitors = competitors;
     }
 
-    public File getCompetitorsFile() {
-        return competitorsFile;
+    public String getCompetitorsFilePath() {
+        return competitorsFilePath;
     }
 
-    public void setCompetitorsFile(File competitorsFile) {
-        this.competitorsFile = competitorsFile;
+    public void setCompetitorsFilePath(String competitorsFilePath) {
+        this.competitorsFilePath = competitorsFilePath;
     }
 
     public int getBracketSize() {
