@@ -15,6 +15,7 @@ public class Competitor {
         return this.rank;
     }
 
+<<<<<<< HEAD
     public String getName() {
         return this.name;
     }
@@ -35,4 +36,29 @@ public class Competitor {
     public void setRegion(String region) {
         this.region = region;
     }
+=======
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getRank() {
+		return rank;
+	}
+
+	public void setRank(int rank) {
+		this.rank = rank;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+>>>>>>> ac4f491c90e8c81501797a6f174cb32a3afa5d9b
 }
