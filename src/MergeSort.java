@@ -1,10 +1,16 @@
 //MergeSort.java
 
 /**
+ * I'm thinking about using Insertion Sort instead.  This code has to be in
+ * the model class.  There is no need for it to be by itself.
+ */
+
+/**
  * Merge sort works best for this program's sort function
  * because the program's sorting MUST be stable
  */
 
+/**
 public class MergeSort {
     private static Competitor[] auxiliary;
 
@@ -39,3 +45,4 @@ public class MergeSort {
     }
 
 }
+*/
