@@ -20,10 +20,11 @@ public class PoolGen {
     public static void main(String[] args) {
         PoolGen poolGen = new PoolGen();
 
-        poolGen.startGUI();
+        poolGen.startGUI(poolGen);
+        System.out.println("test");
     }
 
-    private void startGUI() {
+    private void startGUI(PoolGenView v) {
         // Start GUI
     }
 

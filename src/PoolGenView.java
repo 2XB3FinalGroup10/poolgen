@@ -2,14 +2,19 @@
  * Created by Serge on 08/04/2015.
  */
 import com.sun.org.glassfish.gmbal.ParameterNames;
+import jdk.nashorn.internal.runtime.JSObjectListAdapter;
 
 import javax.swing.*;
+import javax.swing.event.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 public class PoolGenView extends JFrame {
     //Panels
     private JPanel mainMenu;
+
+    //Panes
+    private JScrollPane listPane;
 
     //Buttons
     private JButton deleteButton;
@@ -28,6 +33,9 @@ public class PoolGenView extends JFrame {
 
     //FileChooser
     private JFileChooser fc;
+
+    //List
+    private JList editor;
 
     //Image data here:
     public static final String deleteButtonImageName            = "delete1.png";
@@ -48,12 +56,12 @@ public class PoolGenView extends JFrame {
     //constructors
     public PoolGenView(){ this(initialScreenWidth, initialScreenHeight); }
     public PoolGenView(int width, int height){
-        //gets rid of java's default positioning system so we have more control and can manually position everything using absolute positioning
+        //gets rid of java's default positioning system.  We can edit the position of the buttons, textlabels, scrollpanes, etc..
         this.getContentPane().setLayout(null);
 
-        //This will setup what the user will be able to see.  Main menu is initially visible.
+        //This will setup what the user will be able to see.
         //Additional JPanels should be set to false.
-        setupMainMenu(width, height);                   //sets up the main menu panel
+        setupGUI(width, height);                   //sets up the main menu panel
         this.setTitle("2XB3 Final Project PoolGen");    //title of the program
         this.setSize(width, height);                    //sets the size of the screen
         this.setLayout(null);
@@ -62,21 +70,31 @@ public class PoolGenView extends JFrame {
     }
 
     //Setup
-    private void setupMainMenu(int width, int height){
+    private void setupGUI(int width, int height){
         //create the main menu panel
         mainMenu = new JPanel();            // creates an empty panel
         mainMenu.setSize(width, height);    // sets its size equal to the size and height of the screen
-        mainMenu.setLocation(0, 0);          // sets the location of the panel
-        mainMenu.setLayout(null);           // removes the default layout manager, allowing us to position everything manually and giving us more control
+        mainMenu.setLocation(0, 0);         // sets the location of the panel
+        mainMenu.setLayout(null);           // removes the default layout manager.
+        //create the scroll pane
+        listPane = new JScrollPane();       //creates the scroll pane
+        listPane.setSize(width/2, height-60); //set pane size (should be half the size of the panel)
+        listPane.setLocation(0, 0);         //set location of pane
+        listPane.setLayout(null);           //removes default layout manager.
+
         //create the main menu buttons
-        deleteButton = createButton(deleteButtonImageName, width/2-buttonWidth/2, height/4*2-buttonHeight/2, buttonWidth, buttonHeight, mainMenu, deleteButtonImageNamePressed);
-        generateButton = createButton(generateButtonImageName, width/2-buttonWidth/2, height/4*2-buttonHeight/2, buttonWidth, buttonHeight, mainMenu, generateButtonImageNamePressed);
-        searchButton = createButton(searchButtonImageName, width/2-buttonWidth/2, height/4*2-buttonHeight/2, buttonWidth, buttonHeight, mainMenu, searchButtonImageNamePressed);
+        deleteButton = createButton(deleteButtonImageName, 0, 0, buttonWidth, buttonHeight, mainMenu, deleteButtonImageNamePressed);
+        generateButton = createButton(generateButtonImageName, 0, 0, buttonWidth, buttonHeight, mainMenu, generateButtonImageNamePressed);
+        searchButton = createButton(searchButtonImageName, 0, 0, buttonWidth, buttonHeight, mainMenu, searchButtonImageNamePressed);
         //create the main menu JTextFields
-        bracketSize = createTextField(width/2-buttonWidth/2, height/4*2-buttonHeight/2, 4, mainMenu);
-        seededPlayers = createTextField(width/2-buttonWidth/2, height/4*2-buttonHeight/2, 4, mainMenu);
-        //creates the main menu JLabel
-        errorText = createLabel(error, width/2-buttonWidth/2, height/4*2-buttonHeight/2, mainMenu);
+        bracketSize = createTextField(0, 0, 4, mainMenu);
+        seededPlayers = createTextField(0, 0, 4, mainMenu);
+        //creates the main menu JLabel.  This is initially NOT visible because no error exists.
+        errorText = createLabel(error, 0, 0, mainMenu);
+        errorText.setOpaque(false);
+        errorText.setSize(width - generateButton.getWidth(), 110);
+        errorText.setLocation((width - generateButton.getWidth()) / 2, 0);
+        errorText.setHorizontalAlignment(JTextField.CENTER);
         //add the main menu to the screen
         this.add(mainMenu);
     }
@@ -95,13 +113,25 @@ public class PoolGenView extends JFrame {
         // does not scale so it does not look visually so we kept it 1.0
         float scale = 1.0f;
         //position all the values
+        deleteButton.setSize((int) (buttonWidth * scale), (int) (buttonHeight * scale));
         generateButton.setSize((int) (buttonWidth * scale), (int) (buttonHeight * scale));
+        searchButton.setSize((int) (buttonWidth * scale), (int) (buttonHeight * scale));
+
+        bracketSize.setSize((int) (scale), (int) (scale));
+        seededPlayers.setSize((int) (scale), (int) (scale));
+
+        errorText.setSize((int) (scale), (int) (scale));
 
         //the boundary represents the distance from the edge of the screen to the components on the screen,
         //by changing this variable we can increase or decrease the distance for all the buttons from the edge
         int boundary = 20;
-        //adjust all the button's position
-        generateButton.setLocation(this.getWidth() / 16, this.getHeight() / 8);//top
+        //adjust all the buttons' position
+        deleteButton.setLocation(this.getWidth(), this.getHeight());
+        generateButton.setLocation(this.getWidth(), this.getHeight());
+        searchButton.setLocation(this.getWidth(), this.getHeight());
+        //adjust all the TextFields' position
+        bracketSize.setLocation(this.getWidth(), this.getHeight());
+        seededPlayers.setLocation(this.getWidth(), this.getHeight());
     }
 
     /**
@@ -154,9 +184,7 @@ public class PoolGenView extends JFrame {
      */
     public JTextField createTextField(int x, int y, int l, JPanel parent){
         JTextField newTextField = new JTextField(l);
-
         newTextField.setLocation(x, y);
-
         newTextField.setVisible(true);
 
         parent.add(newTextField);
@@ -174,16 +202,26 @@ public class PoolGenView extends JFrame {
     public JLabel createLabel(String text, int x, int y, JPanel parent){
         JLabel newLabel = new JLabel();
         newLabel.setText(text);
-
         newLabel.setLocation(x, y);
-
         newLabel.setVisible(true);
 
         parent.add(newLabel);
         return newLabel;
     }
 
-    //this function assigns the listeners for the button and the screen.
+
+    public JList createList(Competitor[] competitorList, int x, int y, int width, int height, int tournamentSize, JScrollPane parent){
+        JList newList = new JList(competitorList);
+        newList.setVisibleRowCount(8);
+        newList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        newList.setSize(width, height);
+        newList.setLocation(x, y);
+
+        parent.add(newList);
+        return newList;
+    }
+
+    //this method assigns the listeners for the button and the text fields
     public void addCalculateListener(ActionListener listenForButton){
         //make the listener for the main menu buttons
         deleteButton.addActionListener(listenForButton);

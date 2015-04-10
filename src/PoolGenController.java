@@ -9,17 +9,15 @@ import java.awt.event.ActionListener;
 
 public class PoolGenController {
     private PoolGenView view;
-    private PoolGenModel model;
+    private PoolGen poolGen;
 
     //constructor
-    public PoolGenController(PoolGenView v, PoolGenModel m) {
+    public PoolGenController(PoolGenView v, PoolGen p) {
         view = v;
-        model = m;
-
+        poolGen = p;
         Listener listener = new Listener();
         view.addCalculateListener(listener); // add the listener to the view
-    }
-
+}
     class Listener implements ActionListener {
         //calls for buttons
         //Must check which button is pressed
@@ -35,6 +33,8 @@ public class PoolGenController {
             }
         }//end actionPerformedMethod
         //all these functions were mandatory because if we do not have them then this class would be implementing an interface it does not have functions to
-//
+
     }
 }
+
+
