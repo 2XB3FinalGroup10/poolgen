@@ -209,8 +209,17 @@ public class PoolGenView extends JFrame {
         return newLabel;
     }
 
-
-    public JList createList(Competitor[] competitorList, int x, int y, int width, int height, int tournamentSize, JScrollPane parent){
+    /**
+     *
+     * @param competitorList    the JList data!!
+     * @param x                 the x-coordinate of the location
+     * @param y                 the y-coordinate of the location
+     * @param width             the width of the List???
+     * @param height            the height of the List???
+     * @param parent            the parent JPane which will be added on
+     * @return
+     */
+    public JList createList(Competitor[] competitorList, int x, int y, int width, int height, JScrollPane parent){
         JList newList = new JList(competitorList);
         newList.setVisibleRowCount(8);
         newList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
