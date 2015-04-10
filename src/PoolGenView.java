@@ -62,11 +62,21 @@ public class PoolGenView extends JFrame {
         //This will setup what the user will be able to see.
         //Additional JPanels should be set to false.
         setupGUI(width, height);                   //sets up the main menu panel
+        /** setupList(which list?????, 0, 0, width, height, listPane); */ //Problem here is that we don't know which Competitor[] we are taking in..........  should the constructor also have a Competitor[] @Param?  Sorry for long comment.
         this.setTitle("2XB3 Final Project PoolGen");    //title of the program
         this.setSize(width, height);                    //sets the size of the screen
         this.setLayout(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//sets the default close operation
         mainMenu.setVisible(true);                          // shows the main menu
+        editor.setVisible(false);                           // Showed ONLY IF the fileParser (the method which validates the file) returns true.
+        /**
+         * Pseudo code:
+         * if (fileParser(fileName) == true) {
+         *
+         *      editor.setVisible(true);
+         * } else {
+         *      editor.setVisible(false);
+         */
     }
 
     //Setup
@@ -81,7 +91,6 @@ public class PoolGenView extends JFrame {
         listPane.setSize(width/2, height-60); //set pane size (should be half the size of the panel)
         listPane.setLocation(0, 0);         //set location of pane
         listPane.setLayout(null);           //removes default layout manager.
-
         //create the main menu buttons
         deleteButton = createButton(deleteButtonImageName, 0, 0, buttonWidth, buttonHeight, mainMenu, deleteButtonImageNamePressed);
         generateButton = createButton(generateButtonImageName, 0, 0, buttonWidth, buttonHeight, mainMenu, generateButtonImageNamePressed);
@@ -97,6 +106,14 @@ public class PoolGenView extends JFrame {
         errorText.setHorizontalAlignment(JTextField.CENTER);
         //add the main menu to the screen
         this.add(mainMenu);
+    }
+
+    private void setupList(Competitor[] competitorList, int width, int height){
+        //create the JList
+        editor = createList(competitorList, 0, 0, width, height, listPane);
+        editor.setSize(width, height);
+        editor.setLocation(0, 0);
+        editor.setLayout(null);
     }
 
     @Override
