@@ -62,9 +62,14 @@ public class PoolGenView extends JFrame {
         setSize(width, height);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        PoolGenViewForm form = new PoolGenViewForm();
+        final PoolGenViewForm form = new PoolGenViewForm();
         this.add(form.getBase());
         this.setVisible(true);
+
+        for(Integer i : mPoolGenModel.getCompetitors().keySet()){
+            Competitor c = mPoolGenModel.getCompetitors().get(i);
+            form.competitorList.add(new JTextArea(c.getName()));
+        }
 
         form.browseButton.addActionListener(new ActionListener() {
             @Override
@@ -76,21 +81,23 @@ public class PoolGenView extends JFrame {
         form.deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-
-        form.generateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                poolGen.generatePools();
+                int i = form.competitorList.getSelectedIndex();
+                mPoolGenModel.getCompetitors().remove(i);
             }
         });
 
         form.insertButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                insertPlayer ip = new insertPlayer();
+                ip.setVisible(true);
+            }
+        });
 
+        form.generateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mPoolGen.generatePools();
             }
         });
     }
