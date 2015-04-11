@@ -1,4 +1,6 @@
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -7,17 +9,21 @@ import java.util.Map;
  */
 public class PoolGenModel {
     // Map of seeds to competitors
-    private Map<Integer, Competitor> competitors;
+    private List<Competitor> competitors;
     private File competitorsFile;
     private String competitorsFilePath;
     private int bracketSize;
     private int numExitCompetitors;
 
-    public Map<Integer, Competitor> getCompetitors() {
+    public PoolGenModel() {
+        competitors = new ArrayList<>();
+    }
+
+    public List<Competitor> getCompetitors() {
         return competitors;
     }
 
-    public void setCompetitors(Map<Integer, Competitor> competitors) {
+    public void setCompetitors(List<Competitor> competitors) {
         this.competitors = competitors;
     }
 
