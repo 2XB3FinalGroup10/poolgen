@@ -35,7 +35,11 @@ public class PoolGen {
             printUsage();
         }
 
-        generatePools();
+        try {
+            printPools(generatePools());
+        } catch (IOException e) {
+            System.out.println("Error writing to file!");
+        }
     }
 
     /**
@@ -88,6 +92,10 @@ public class PoolGen {
             throw new IllegalArgumentException("poolExitSize must be an integer.", e);
         }
 
+        if ((model.getCompetitors().size() < model.getBracketSize())) {
+            throw new IllegalArgumentException("Number of competitors cannot be less than the bracket size.");
+        }
+
         // Only warn about excess arguments after required arguments have been validated
         if (args.length > 3) {
             System.out.println("Warning: ignoring excess arguments");
@@ -103,7 +111,7 @@ public class PoolGen {
         System.out.println(usage);
     }
 
-    private void loadCompetitors() throws IllegalArgumentException {
+    public void loadCompetitors() throws IllegalArgumentException {
         model.setCompetitors(new ArrayList<Competitor>());
 
         File competitorsFile = new File(model.getCompetitorsFilePath());
@@ -135,7 +143,7 @@ public class PoolGen {
         }
     }
 
-    public void generatePools() {
+    public Map<Integer, List<Competitor>> generatePools() {
         // Sort competitors
         Competitor[] competitors = new Competitor[model.getCompetitors().size()];
         model.getCompetitors().toArray(competitors);
@@ -157,25 +165,26 @@ public class PoolGen {
             }
         }
 
-        System.out.println("LOL DONE??");
+        return pools;
+    }
+
+    public void printPools(Map<Integer, List<Competitor>> pools) throws IOException {
+        File out = new File(model.getCompetitorsFile().getParent(), "pools.txt");
+        BufferedWriter bw = new BufferedWriter(new FileWriter(out));
+
+        for (Map.Entry<Integer, List<Competitor>> pool : pools.entrySet()) {
+            bw.write("Pool " + pool.getKey() + "\r\n");
+            for (Competitor competitor : pool.getValue()) {
+                bw.write("Name: " + competitor.getName() + ", Region: " + competitor.getRegion() + "\r\n");
+            }
+            bw.newLine();
+        }
+
+        bw.flush();
+        bw.close();
     }
 
     public PoolGenModel getModel() {
         return model;
     }
-//-------Begin Insertion Sort algorithm methods--------//
-    public static void insertionSort(Competitor[] list){
-        int N = list.length;
-        for (int i = 1; i < N; i++) {
-            for (int j = i; j > 0 && list[j].compareTo(list[j-1]) <= 0; j--)
-                exch(list, j, j - 1);
-        }
-    }
-
-    private static void exch(Competitor[] list, int i, int j) {
-        Competitor t = list[i];
-        list[i] = list[j];
-        list[j] = t;
-    }
-//------End Insertion sort algorithm methods-----------//
 }
