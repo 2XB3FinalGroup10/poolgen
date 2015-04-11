@@ -234,7 +234,7 @@ public class PoolGenView extends JFrame {
      * @param width             the width of the List???
      * @param height            the height of the List???
      * @param parent            the parent JPane which will be added on
-     * @return
+     * @return the list of competitors
      */
     public JList createList(Competitor[] competitorList, int x, int y, int width, int height, JScrollPane parent){
         JList newList = new JList(competitorList);
