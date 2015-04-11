@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class PoolGen {
     private static final String ACCEPTED_COMPETITOR_FILE_TYPES = "csv, txt";
 
-    private PoolGenModel model;
+    private final PoolGenModel model = new PoolGenModel();
 
     public static void main(String[] args) {
         PoolGen poolGen = new PoolGen();
@@ -24,7 +24,7 @@ public class PoolGen {
     }
 
     private void startGUI() {
-        // Start GUI
+        PoolGenView view = new PoolGenView();
     }
 
     private void startCMD(String[] args) {
@@ -47,21 +47,25 @@ public class PoolGen {
 
         String competitorsFilePath = "", bracketSize = "", poolExitSize = "";
 
-        for (String arg : args) {
-            String opt = arg.substring(0, arg.indexOf('='));
-            String val = arg.substring(arg.indexOf('=') + 1);
+        try {
+            for (String arg : args) {
+                String opt = arg.substring(0, arg.indexOf('='));
+                String val = arg.substring(arg.indexOf('=') + 1);
 
-            switch (opt) {
-                case "--importFile":
-                    competitorsFilePath = val;
-                    break;
-                case "--bracketSize":
-                    bracketSize = val;
-                    break;
-                case "--poolExitSize":
-                    poolExitSize = val;
-                    break;
+                switch (opt) {
+                    case "--importFile":
+                        competitorsFilePath = val;
+                        break;
+                    case "--bracketSize":
+                        bracketSize = val;
+                        break;
+                    case "--poolExitSize":
+                        poolExitSize = val;
+                        break;
+                }
             }
+        } catch (StringIndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("Invalid arguments.  Arguments must be formatted as: --option=value", e);
         }
 
         if (StringUtils.isAnyNullOrEmpty(competitorsFilePath, bracketSize, poolExitSize))
@@ -102,7 +106,7 @@ public class PoolGen {
 
         File competitorsFile = new File(model.getCompetitorsFilePath());
 
-        if (FileUtils.isValidFile(competitorsFile, ACCEPTED_COMPETITOR_FILE_TYPES)) {
+        if (FileUtils.isValidFile(competitorsFile, ACCEPTED_COMPETITOR_FILE_TYPES.split(","))) {
             model.setCompetitorsFile(competitorsFile);
         } else {
             throw new IllegalArgumentException("Input file is not valid or does not exist.");
@@ -127,15 +131,11 @@ public class PoolGen {
         }
     }
 
-    private void generatePools() {
+    public void generatePools() {
         // Pools get generated
     }
 
     public PoolGenModel getModel() {
         return model;
-    }
-
-    public void setModel(PoolGenModel model) {
-        this.model = model;
     }
 }
