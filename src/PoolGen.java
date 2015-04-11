@@ -146,6 +146,7 @@ public class PoolGen {
     public Map<Integer, List<Competitor>> generatePools() {
         // Sort competitors
         Competitor[] competitors = new Competitor[model.getCompetitors().size()];
+
         model.getCompetitors().toArray(competitors);
         Arrays.sort(competitors);
 
@@ -156,14 +157,54 @@ public class PoolGen {
         int playersPerPool = new Double(Math.ceil(model.getCompetitors().size() / (float) numPools)).intValue();
 
         Map<Integer, List<Competitor>> pools = new HashMap<>();
-        for (int i = 0; i < numPools; i++) {
+        for (int i = 0; i < competitors.length; i+=numPools) {
+            for (int j = i; j < Math.min(i + numPools, competitors.length); j++) {
+                boolean placed = false;
+
+                for (int k = 0; k < numPools; k++) {
+                    if (pools.get(k) == null) {
+                        pools.put(k, new ArrayList<Competitor>());
+                    }
+
+                    if (pools.get(k).size() > (i / numPools)) continue;
+
+                    boolean conflictingRegion = false;
+                    for (Competitor c : pools.get(k)) {
+                        if (c.getRegion().equals(competitors[j].getRegion())) {
+                            conflictingRegion = true;
+                            break;
+                        }
+                    }
+
+                    if (conflictingRegion) continue;
+
+                    pools.get(k).add(competitors[j]);
+                    placed = true;
+                    break;
+                }
+
+                if (!placed) {
+                    for (int k = 0; k < numPools; k++) {
+                        if (pools.get(k).size() > (i % numPools)) continue;
+                        pools.get(k).add(competitors[j]); // always adds
+                        break;
+                    }
+                }
+            }
+        }
+
+
+/*        for (int i = 0; i < numPools; i++) {
             pools.put(i, new ArrayList<Competitor>());
 
             for (int j = 0; j < playersPerPool; j++) {
-                if ((i * playersPerPool + j) > competitors.length) break;
-                pools.get(i).add(competitors[i * playersPerPool + j]);
+                for (int k = i * numPools; k < numPools; k++) {
+
+                }
+                if ((j * numPools + i) > competitors.length) break;
+                pools.get(i).add(competitors[j * numPools + i]);
             }
-        }
+        }*/
 
         return pools;
     }
@@ -173,7 +214,7 @@ public class PoolGen {
         BufferedWriter bw = new BufferedWriter(new FileWriter(out));
 
         for (Map.Entry<Integer, List<Competitor>> pool : pools.entrySet()) {
-            bw.write("Pool " + pool.getKey() + "\r\n");
+            bw.write("Pool " + (pool.getKey() + 1) + "\r\n");
             for (Competitor competitor : pool.getValue()) {
                 bw.write("Name: " + competitor.getName() + ", Region: " + competitor.getRegion() + "\r\n");
             }

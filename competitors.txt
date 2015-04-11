@@ -1,8 +1,0 @@
-Player1,1,Hamilton
-Player2,8,Toronto
-Player3,4,Brampton
-Player4,6,Mississauga
-Player5,7,Oakville
-Player6,2,Hamilton
-Player7,3,Oshawa
-Player8,5,Toronto
