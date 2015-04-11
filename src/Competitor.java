@@ -1,6 +1,6 @@
 //Competitor.java
 
-public class Competitor {
+public class Competitor implements Comparable<Competitor> {
 	private String name;
 	private int rank;
 	private String region;
@@ -22,4 +22,9 @@ public class Competitor {
 	public String getRegion() {return region;}
 
 	public void setRegion(String region) {this.region = region;}
+
+	@Override
+	public int compareTo(Competitor o) {
+		return this.rank - o.getRank();
+	}
 }

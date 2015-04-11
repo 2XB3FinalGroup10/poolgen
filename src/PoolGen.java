@@ -2,14 +2,14 @@ import util.FileUtils;
 import util.StringUtils;
 
 import java.io.*;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Author: Zed
  * Date: 4/3/2015
  */
 public class PoolGen {
-    private static final String ACCEPTED_COMPETITOR_FILE_TYPES = "csv, txt";
+    private static final String ACCEPTED_COMPETITOR_FILE_TYPES = "csv,txt";
 
     private final PoolGenModel model = new PoolGenModel();
 
@@ -102,7 +102,7 @@ public class PoolGen {
     }
 
     private void loadCompetitors() throws IllegalArgumentException {
-        model.setCompetitors(new HashMap<Integer, Competitor>());
+        model.setCompetitors(new ArrayList<Competitor>());
 
         File competitorsFile = new File(model.getCompetitorsFilePath());
 
@@ -124,7 +124,9 @@ public class PoolGen {
                 }
 
                 Competitor competitor = new Competitor(parts[0], Integer.parseInt(parts[1]), parts[2]);
-                model.getCompetitors().put(competitor.getRank(), competitor);
+                model.getCompetitors().add(competitor);
+
+                line = br.readLine();
             }
         } catch (IOException e) {
             throw new IllegalArgumentException("Input file is not valid.", e);
@@ -132,7 +134,25 @@ public class PoolGen {
     }
 
     public void generatePools() {
-        // Pools get generated
+        // Sort competitors
+        Competitor[] competitors = new Competitor[model.getCompetitors().size()];
+        model.getCompetitors().toArray(competitors);
+        Arrays.sort(competitors);
+
+        // Get the number of pools
+        int numPools = new Double(Math.floor(model.getBracketSize() / (double) model.getNumExitCompetitors())).intValue();
+
+        // Get the number of competitors per pool
+        int playersPerPool = new Double(Math.ceil(model.getCompetitors().size() / (float) numPools)).intValue();
+
+        Map<Integer, List<Competitor>> pools = new HashMap<>();
+        for (int i = 0; i < numPools; i++) {
+            pools.put(i, new ArrayList<Competitor>());
+
+            for (int j = 0; j < playersPerPool; j++) {
+
+            }
+        }
     }
 
     public PoolGenModel getModel() {
@@ -142,13 +162,9 @@ public class PoolGen {
     public static void insertionSort(Competitor[] list){
         int N = list.length;
         for (int i = 1; i < N; i++) {
-            for (int j = i; j > 0 && less(list[j], list[j - 1]); j--)
+            for (int j = i; j > 0 && list[j].compareTo(list[j-1]) <= 0; j--)
                 exch(list, j, j - 1);
         }
-    }
-
-    private static boolean less(Competitor a, Competitor b) {
-        return a.getRank() <= b.getRank();
     }
 
     private static void exch(Competitor[] list, int i, int j) {
