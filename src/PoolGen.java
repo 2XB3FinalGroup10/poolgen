@@ -2,7 +2,6 @@ import util.FileUtils;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Author: Zed
@@ -11,48 +10,107 @@ import java.util.Map;
 public class PoolGen {
     private static final String ACCEPTED_COMPETITOR_FILE_TYPES = "csv, txt";
 
-    // Map of seeds to competitors
-    private Map<Integer, Competitor> competitors;
-    private File competitorsFile;
-    private String competitorsFilePath;
-    private int bracketSize;
-    private int numExitCompetitors;
+    private PoolGenModel model;
 
     public static void main(String[] args) {
         PoolGen poolGen = new PoolGen();
 
-        poolGen.startGUI(poolGen);
-        System.out.println("test");
+        if (args.length == 0) {
+            poolGen.startGUI();
+        } else {
+            poolGen.startCMD(args);
+        }
     }
 
-    private void startGUI(PoolGenView v) {
+    private void startGUI() {
         // Start GUI
     }
 
-    private void loadCompetitors() throws IOException, IllegalArgumentException {
-        competitors = new HashMap<Integer, Competitor>();
+    private void startCMD(String[] args) {
+        try {
+            parseArgs(args);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            printUsage();
+        }
+    }
 
-        File competitorsFile = new File(this.competitorsFilePath);
+    /**
+     * Parses arguments and populates the PoolGenModel
+     *
+     * @param args arguments passed to program start
+     * @throws IllegalArgumentException
+     */
+    private void parseArgs(String[] args) throws IllegalArgumentException {
+        if (args.length < 3) throw new IllegalArgumentException("Missing arguments");
+
+        for (String arg : args) {
+            String opt = arg.substring(0, arg.indexOf('='));
+            String val = arg.substring(arg.indexOf('=') + 1);
+
+            switch (opt) {
+                case "--importFile":
+                    model.setCompetitorsFilePath(val);
+                    loadCompetitors();
+                    break;
+                case "--bracketSize":
+                    try {
+                        model.setBracketSize(Integer.parseInt(val));
+                    } catch (NumberFormatException e) {
+                        throw new IllegalArgumentException("bracketSize must be an integer.", e);
+                    }
+                    break;
+                case "--poolExitSize":
+                    try {
+                        model.setNumExitCompetitors(Integer.parseInt(val));
+                    } catch (NumberFormatException e) {
+                        throw new IllegalArgumentException("poolExitSize must be an integer.", e);
+                    }
+                    break;
+            }
+        }
+
+        if (args.length > 3) {
+            System.out.println("Warning: ignoring excess arguments");
+        }
+    }
+
+    private void printUsage() {
+        String usage = "Usage:\r\n"
+                + "--importFile: absolute path to import file\r\n"
+                + "--bracketSize: maximum number of players to be seeded into final bracket\r\n"
+                + "--poolExitSize: number of players to leave each pool\r\n";
+
+        System.out.println(usage);
+    }
+
+    private void loadCompetitors() throws IllegalArgumentException {
+        model.setCompetitors(new HashMap<Integer, Competitor>());
+
+        File competitorsFile = new File(model.getCompetitorsFilePath());
 
         if (FileUtils.isValidFile(competitorsFile, ACCEPTED_COMPETITOR_FILE_TYPES)) {
-            this.competitorsFile = competitorsFile;
+            model.setCompetitorsFile(competitorsFile);
         } else {
             throw new IllegalArgumentException("Input file is not valid or does not exist.");
         }
 
-        BufferedReader br = new BufferedReader(new FileReader(this.competitorsFile));
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(model.getCompetitorsFile()));
+            String line = br.readLine();
 
-        String line = br.readLine();
+            while (line != null) {
+                String[] parts = line.split(",");
 
-        while (line != null) {
-            String[] parts = line.split(",");
+                if (parts.length != 3) {
+                    throw new IllegalArgumentException("Input File is not valid.");
+                }
 
-            if (parts.length != 3) {
-                throw new IllegalArgumentException("Input File is not valid.");
+                Competitor competitor = new Competitor(parts[0], Integer.parseInt(parts[1]), parts[2]);
+                model.getCompetitors().put(competitor.getRank(), competitor);
             }
-
-            Competitor competitor = new Competitor(parts[0], Integer.parseInt(parts[1]), parts[2]);
-            competitors.put(competitor.getRank(), competitor);
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Input file is not valid.", e);
         }
     }
 
@@ -60,35 +118,11 @@ public class PoolGen {
         // Pools get generated
     }
 
-    public Map<Integer, Competitor> getCompetitors() {
-        return competitors;
+    public PoolGenModel getModel() {
+        return model;
     }
 
-    public void setCompetitors(HashMap<Integer, Competitor> competitors) {
-        this.competitors = competitors;
-    }
-
-    public String getCompetitorsFilePath() {
-        return competitorsFilePath;
-    }
-
-    public void setCompetitorsFilePath(String competitorsFilePath) {
-        this.competitorsFilePath = competitorsFilePath;
-    }
-
-    public int getBracketSize() {
-        return bracketSize;
-    }
-
-    public void setBracketSize(int bracketSize) {
-        this.bracketSize = bracketSize;
-    }
-
-    public int getNumExitCompetitors() {
-        return numExitCompetitors;
-    }
-
-    public void setNumExitCompetitors(int numExitCompetitors) {
-        this.numExitCompetitors = numExitCompetitors;
+    public void setModel(PoolGenModel model) {
+        this.model = model;
     }
 }
