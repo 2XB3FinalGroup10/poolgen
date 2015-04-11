@@ -1,4 +1,5 @@
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,10 @@ public class PoolGenModel {
     private String competitorsFilePath;
     private int bracketSize;
     private int numExitCompetitors;
+
+    public PoolGenModel() {
+        competitors = new ArrayList<>();
+    }
 
     public List<Competitor> getCompetitors() {
         return competitors;

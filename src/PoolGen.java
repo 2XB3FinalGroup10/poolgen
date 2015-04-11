@@ -24,7 +24,7 @@ public class PoolGen {
     }
 
     private void startGUI() {
-        PoolGenView view = new PoolGenView();
+        new PoolGenView(this);
     }
 
     private void startCMD(String[] args) {
@@ -34,6 +34,8 @@ public class PoolGen {
             System.out.println(e.getMessage());
             printUsage();
         }
+
+        generatePools();
     }
 
     /**
@@ -150,9 +152,12 @@ public class PoolGen {
             pools.put(i, new ArrayList<Competitor>());
 
             for (int j = 0; j < playersPerPool; j++) {
-
+                if ((i * playersPerPool + j) > competitors.length) break;
+                pools.get(i).add(competitors[i * playersPerPool + j]);
             }
         }
+
+        System.out.println("LOL DONE??");
     }
 
     public PoolGenModel getModel() {
