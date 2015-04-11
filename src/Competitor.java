@@ -11,27 +11,15 @@ public class Competitor {
 		this.region = region;
 	}
 
-	public String getName() {
-		return name;
-	}
+	public String getName() {return name;}
 
-	public void setName(String name) {
-		this.name = name;
-	}
+	public void setName(String name) {this.name = name;}
 
-	public int getRank() {
-		return rank;
-	}
+	public int getRank() {return rank;}
 
-	public void setRank(int rank) {
-		this.rank = rank;
-	}
+	public void setRank(int rank) {this.rank = rank;}
 
-	public String getRegion() {
-		return region;
-	}
+	public String getRegion() {return region;}
 
-	public void setRegion(String region) {
-		this.region = region;
-	}
+	public void setRegion(String region) {this.region = region;}
 }

@@ -138,4 +138,21 @@ public class PoolGen {
     public void setModel(PoolGenModel model) {
         this.model = model;
     }
+//-------Begin Insertion Sort algorithm methods--------//
+    public static void insertionSort(Competitor[] list){
+        int N = list.length;
+        for (int j = i; j > 0 && less(list[j], list[j-1]); j--)
+            exch(list, j, j-1);
+    }
+
+    private static boolean less(Competitor a, Competitor b) {
+        return a.getRank() <= b.getRank();
+    }
+
+    private static void exch(Competitor[] list, int i, int j) {
+        Competitor t = list[i];
+        list[i] = list[j];
+        list[j] = t;
+    }
+//------End Insertion sort algorithm methods-----------//
 }
