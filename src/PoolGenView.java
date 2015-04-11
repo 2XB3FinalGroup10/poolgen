@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class PoolGenView extends JFrame {
+    private PoolGen mPoolGen;
+    private PoolGenModel mPoolGenModel;
+
     //Panels
     private JPanel mainMenu;
 
@@ -51,8 +54,10 @@ public class PoolGenView extends JFrame {
     private static final int initialScreenWidth  = 500;
 
     //constructors
-    public PoolGenView(){ this(initialScreenWidth, initialScreenHeight); }
-    public PoolGenView(int width, int height){
+    public PoolGenView(final PoolGen pg){ this(initialScreenWidth, initialScreenHeight, pg); }
+    public PoolGenView(int width, int height, final PoolGen poolGen){
+        this.mPoolGen = poolGen;
+        this.mPoolGenModel = poolGen.getModel();
         setTitle("Test");
         setSize(width, height);
         setLocationRelativeTo(null);
@@ -78,7 +83,7 @@ public class PoolGenView extends JFrame {
         form.generateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                poolGen.generatePools();
             }
         });
 
