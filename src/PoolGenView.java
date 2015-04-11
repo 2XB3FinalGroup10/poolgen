@@ -49,6 +49,8 @@ public class PoolGenView extends JFrame {
                 chooser.showOpenDialog(null);
                 String path = chooser.getSelectedFile().getAbsolutePath();
                 mForm.file.setText(path);
+
+                mPoolGenModel.setCompetitorsFilePath(path);
             }
         });
 
