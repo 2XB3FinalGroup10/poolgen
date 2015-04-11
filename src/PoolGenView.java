@@ -3,8 +3,14 @@
  */
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.text.TextAction;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 public class PoolGenView extends JFrame {
     private PoolGen mPoolGen;
@@ -51,6 +57,12 @@ public class PoolGenView extends JFrame {
                 mForm.file.setText(path);
 
                 mPoolGenModel.setCompetitorsFilePath(path);
+                try {
+                    mPoolGen.loadCompetitors();
+                    generateList();
+                } catch (IllegalArgumentException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
             }
         });
 
@@ -82,7 +94,49 @@ public class PoolGenView extends JFrame {
         mForm.generateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mPoolGen.generatePools();
+                try {
+                    mPoolGen.printPools(mPoolGen.generatePools());
+                } catch (IOException e1) {
+                    JOptionPane.showMessageDialog(null, e1.getMessage());
+                }
+            }
+        });
+
+        mForm.competitorsLeave.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                try {
+                    mPoolGenModel.setNumExitCompetitors(Integer.parseInt(mForm.competitorsLeave.getText()));
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Invalid Input");
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+            }
+        });
+
+        mForm.bracketSize.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                try {
+                    mPoolGenModel.setNumExitCompetitors(Integer.parseInt(e.getDocument().toString()));
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Invalid Input");
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
             }
         });
 

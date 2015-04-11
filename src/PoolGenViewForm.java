@@ -11,7 +11,7 @@ public class PoolGenViewForm {
     public JButton generateButton;
     public JPanel basePanel;
     public JTextField bracketSize;
-    public JTextField textField1;
+    public JTextField competitorsLeave;
     public JTextField file;
 
     public JPanel getBase() {
