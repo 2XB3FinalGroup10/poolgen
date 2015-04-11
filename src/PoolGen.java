@@ -1,4 +1,5 @@
 import util.FileUtils;
+import util.StringUtils;
 
 import java.io.*;
 import java.util.HashMap;
@@ -44,32 +45,44 @@ public class PoolGen {
     private void parseArgs(String[] args) throws IllegalArgumentException {
         if (args.length < 3) throw new IllegalArgumentException("Missing arguments");
 
+        String competitorsFilePath = "", bracketSize = "", poolExitSize = "";
+
         for (String arg : args) {
             String opt = arg.substring(0, arg.indexOf('='));
             String val = arg.substring(arg.indexOf('=') + 1);
 
             switch (opt) {
                 case "--importFile":
-                    model.setCompetitorsFilePath(val);
-                    loadCompetitors();
+                    competitorsFilePath = val;
                     break;
                 case "--bracketSize":
-                    try {
-                        model.setBracketSize(Integer.parseInt(val));
-                    } catch (NumberFormatException e) {
-                        throw new IllegalArgumentException("bracketSize must be an integer.", e);
-                    }
+                    bracketSize = val;
                     break;
                 case "--poolExitSize":
-                    try {
-                        model.setNumExitCompetitors(Integer.parseInt(val));
-                    } catch (NumberFormatException e) {
-                        throw new IllegalArgumentException("poolExitSize must be an integer.", e);
-                    }
+                    poolExitSize = val;
                     break;
             }
         }
 
+        if (StringUtils.isAnyNullOrEmpty(competitorsFilePath, bracketSize, poolExitSize))
+            throw new IllegalArgumentException("Missing arguments");
+
+        model.setCompetitorsFilePath(competitorsFilePath);
+        loadCompetitors();
+
+        try {
+            model.setBracketSize(Integer.parseInt(bracketSize));
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("bracketSize must be an integer.", e);
+        }
+
+        try {
+            model.setNumExitCompetitors(Integer.parseInt(poolExitSize));
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("poolExitSize must be an integer.", e);
+        }
+
+        // Only warn about excess arguments after required arguments have been validated
         if (args.length > 3) {
             System.out.println("Warning: ignoring excess arguments");
         }
