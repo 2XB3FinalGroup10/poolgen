@@ -10,9 +10,9 @@ public class PoolGenViewForm {
     public JButton deleteButton;
     public JButton generateButton;
     public JPanel basePanel;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JTextField textField3;
+    public JTextField bracketSize;
+    public JTextField textField1;
+    public JTextField file;
 
     public JPanel getBase() {
         return basePanel;

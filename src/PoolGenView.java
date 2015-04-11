@@ -45,7 +45,10 @@ public class PoolGenView extends JFrame {
         mForm.browseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                JFileChooser chooser = new JFileChooser();
+                chooser.showOpenDialog(null);
+                String path = chooser.getSelectedFile().getAbsolutePath();
+                mForm.file.setText(path);
             }
         });
 
@@ -54,6 +57,7 @@ public class PoolGenView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int i = mForm.competitorList.getSelectedIndex();
                 mPoolGenModel.getCompetitors().remove(i);
+                generateList();
             }
         });
 
