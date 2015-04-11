@@ -3,7 +3,6 @@
  */
 
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -48,33 +47,47 @@ public class PoolGenView extends JFrame {
     private static final int buttonHeight = 41;     //stores height
 
     //Screen size
-    private static final int initialScreenHeight = 800;
+    private static final int initialScreenHeight = 500;
     private static final int initialScreenWidth  = 500;
 
     //constructors
     public PoolGenView(){ this(initialScreenWidth, initialScreenHeight); }
     public PoolGenView(int width, int height){
-        //gets rid of java's default positioning system.  We can edit the position of the buttons, textlabels, scrollpanes, etc..
-        this.getContentPane().setLayout(null);
+        setTitle("Test");
+        setSize(width, height);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        PoolGenViewForm form = new PoolGenViewForm();
+        this.add(form.getBase());
+        this.setVisible(true);
 
-        //This will setup what the user will be able to see.
-        //Additional JPanels should be set to false.
-        setupGUI(width, height);                   //sets up the main menu panel
-        /** setupList(which list?????, 0, 0, width, height, listPane); */ //Problem here is that we don't know which Competitor[] we are taking in..........  should the constructor also have a Competitor[] @Param?  Sorry for long comment.
-        this.setTitle("2XB3 Final Project PoolGen");    //title of the program
-        this.setSize(width, height);                    //sets the size of the screen
-        this.setLayout(null);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//sets the default close operation
-        mainMenu.setVisible(true);                          // shows the main menu
-        editor.setVisible(false);                           // Showed ONLY IF the fileParser (the method which validates the file) returns true.
-        /**
-         * Pseudo code:
-         * if (fileParser(fileName) == true) {
-         *
-         *      editor.setVisible(true);
-         * } else {
-         *      editor.setVisible(false);
-         */
+        form.browseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        form.deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        form.generateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        form.insertButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
 
     //Setup
@@ -89,6 +102,7 @@ public class PoolGenView extends JFrame {
         listPane.setSize(width/2, height-60); //set pane size (should be half the size of the panel)
         listPane.setLocation(0, 0);         //set location of pane
         listPane.setLayout(null);           //removes default layout manager.
+        setupList(new Competitor[]{}, 0, 0);
         //create the main menu buttons
         deleteButton = createButton(deleteButtonImageName, 0, 0, buttonWidth, buttonHeight, mainMenu, deleteButtonImageNamePressed);
         generateButton = createButton(generateButtonImageName, 0, 0, buttonWidth, buttonHeight, mainMenu, generateButtonImageNamePressed);
@@ -121,38 +135,38 @@ public class PoolGenView extends JFrame {
 
         //since this function gets called when the screen is resized we need to adjust the position and size of all the panels or else resizing would not work
         //the board might have been moved or resized so we need to resize and reposition all the buttons
-        mainMenu.setSize(this.getSize());   //updates the size of the screen
-        //all the buttons are with respect to the scale variable. what this does is that it allows
-        // each component to resize depending on this size variable, And if we make this variable adjust
-        // its size based on the screen size the entire screen should scale accordingly, But currently the image on the buttons
-        // does not scale so it does not look visually so we kept it 1.0
-        float scale = 1.0f;
-        //position all the values
-        deleteButton.setSize((int) (buttonWidth * scale), (int) (buttonHeight * scale));
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //TODO: delete action
-            }
-        });
-        generateButton.setSize((int) (buttonWidth * scale), (int) (buttonHeight * scale));
-        searchButton.setSize((int) (buttonWidth * scale), (int) (buttonHeight * scale));
-
-        bracketSize.setSize((int) (scale), (int) (scale));
-        seededPlayers.setSize((int) (scale), (int) (scale));
-
-        errorText.setSize((int) (scale), (int) (scale));
-
-        //the boundary represents the distance from the edge of the screen to the components on the screen,
-        //by changing this variable we can increase or decrease the distance for all the buttons from the edge
-        int boundary = 20;
-        //adjust all the buttons' position
-        deleteButton.setLocation(this.getWidth(), this.getHeight());
-        generateButton.setLocation(this.getWidth(), this.getHeight());
-        searchButton.setLocation(this.getWidth(), this.getHeight());
-        //adjust all the TextFields' position
-        bracketSize.setLocation(this.getWidth(), this.getHeight());
-        seededPlayers.setLocation(this.getWidth(), this.getHeight());
+//        mainMenu.setSize(this.getSize());   //updates the size of the screen
+//        //all the buttons are with respect to the scale variable. what this does is that it allows
+//        // each component to resize depending on this size variable, And if we make this variable adjust
+//        // its size based on the screen size the entire screen should scale accordingly, But currently the image on the buttons
+//        // does not scale so it does not look visually so we kept it 1.0
+//        float scale = 1.0f;
+//        //position all the values
+//        deleteButton.setSize((int) (buttonWidth * scale), (int) (buttonHeight * scale));
+//        deleteButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                //TODO: delete action
+//            }
+//        });
+//        generateButton.setSize((int) (buttonWidth * scale), (int) (buttonHeight * scale));
+//        searchButton.setSize((int) (buttonWidth * scale), (int) (buttonHeight * scale));
+//
+//        bracketSize.setSize((int) (scale), (int) (scale));
+//        seededPlayers.setSize((int) (scale), (int) (scale));
+//
+//        errorText.setSize((int) (scale), (int) (scale));
+//
+//        //the boundary represents the distance from the edge of the screen to the components on the screen,
+//        //by changing this variable we can increase or decrease the distance for all the buttons from the edge
+//        int boundary = 20;
+//        //adjust all the buttons' position
+//        deleteButton.setLocation(this.getWidth(), this.getHeight());
+//        generateButton.setLocation(this.getWidth(), this.getHeight());
+//        searchButton.setLocation(this.getWidth(), this.getHeight());
+//        //adjust all the TextFields' position
+//        bracketSize.setLocation(this.getWidth(), this.getHeight());
+//        seededPlayers.setLocation(this.getWidth(), this.getHeight());
     }
 
     /**
