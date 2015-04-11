@@ -1,8 +1,6 @@
 /**
  * Created by Serge on 08/04/2015.
  */
-import com.sun.org.glassfish.gmbal.ParameterNames;
-import jdk.nashorn.internal.runtime.JSObjectListAdapter;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -131,6 +129,12 @@ public class PoolGenView extends JFrame {
         float scale = 1.0f;
         //position all the values
         deleteButton.setSize((int) (buttonWidth * scale), (int) (buttonHeight * scale));
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO: delete action
+            }
+        });
         generateButton.setSize((int) (buttonWidth * scale), (int) (buttonHeight * scale));
         searchButton.setSize((int) (buttonWidth * scale), (int) (buttonHeight * scale));
 
@@ -224,6 +228,10 @@ public class PoolGenView extends JFrame {
 
         parent.add(newLabel);
         return newLabel;
+    }
+
+    public void setMessageText(String error){
+        errorText.setText(error);
     }
 
     /**
