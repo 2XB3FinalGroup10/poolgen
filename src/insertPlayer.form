@@ -78,7 +78,7 @@
               <text value="Name"/>
             </properties>
           </component>
-          <component id="f96f1" class="javax.swing.JTextField" binding="textField1" default-binding="true">
+          <component id="f96f1" class="javax.swing.JTextField" binding="compName">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -94,7 +94,7 @@
               <text value="Seed"/>
             </properties>
           </component>
-          <component id="48b12" class="javax.swing.JTextField" binding="textField2" default-binding="true">
+          <component id="48b12" class="javax.swing.JTextField" binding="compSeed">
             <constraints>
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
@@ -110,7 +110,7 @@
               <text value="Region"/>
             </properties>
           </component>
-          <component id="7ade7" class="javax.swing.JTextField" binding="textField3" default-binding="true">
+          <component id="7ade7" class="javax.swing.JTextField" binding="compRegion">
             <constraints>
               <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>

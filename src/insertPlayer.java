@@ -5,9 +5,15 @@ public class insertPlayer extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JTextField textField3;
+    private JTextField compName;
+    private JTextField compSeed;
+    private JTextField compRegion;
+
+    public Listener mListener;
+
+    public interface Listener {
+        void onOk(Competitor c);
+    }
 
     public insertPlayer() {
         setContentPane(contentPane);
@@ -44,6 +50,11 @@ public class insertPlayer extends JDialog {
 
     private void onOK() {
 // add your code here
+        Competitor newC = new Competitor(compName.getText(),
+                Integer.valueOf(compSeed.getText()),
+                compRegion.getText());
+
+        mListener.onOk(newC);
         dispose();
     }
 
